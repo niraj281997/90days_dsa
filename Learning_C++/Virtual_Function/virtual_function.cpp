@@ -27,6 +27,11 @@ class A
         virtual void function1() = 0;
 };
 
+what is the use of pure virtual function?
+The main use of a pure virtual function is to make a class abstract.
+An abstract class is a class that cannot
+be instantiated and is designed to be subclassed.
+An abstract class is a class that contains at least one pure virtual function.
 
  */
 class parent
