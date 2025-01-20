@@ -1,0 +1,508 @@
+Que 1. What is static variable and static function in C++?
+    Static Variable
+        Scope: 
+            A static variable inside a function retains its value between function calls. 
+            It is initialized only once and exists for the lifetime of the program.
+        Class Context:
+             When declared within a class, a static variable is shared among all instances of the class. 
+             It is not tied to any specific object instance.
+    
+    Static Function
+        Class Context:
+             A static function in a class can be called without creating an instance of the class.
+             It can only access static variables or other static functions within the class.
+
+        Definition: 
+            A static member function belongs to the class rather than any object instance.
+        Access: 
+            It can be called using the class name without creating an object of the class.
+        Restrictions:
+             It can only access static members of the class.
+
+                #include <iostream>
+
+                class Example {
+                public:
+                    static int staticVar;
+
+                    static void staticFunction() {
+                        std::cout << "Static variable value: " << staticVar << std::endl;
+                    }
+                };
+
+                // Definition of the static variable
+                int Example::staticVar = 10;
+
+                int main() {
+                    Example::staticFunction(); // Output: Static variable value: 10
+                    return 0;
+        }
+Que 2. is static function is member function?
+    Yes, a static function is a member function of a class in C++. However, unlike non-static member functions,
+    it does not operate on an instance of the class. Instead, it can be called using the class name itself and can only access static members
+    (variables or other static functions) of the class.
+
+Que 3. What is the use of static function in c++?
+        Utility Functions: Static functions can be used to create utility functions that do not depend on object state. 
+        These functions can perform operations related to the class but do not require an instance of the class.
+    Access Control:
+         Static functions can be used to control access to static variables. By making the variable private and providing public static functions to access or modify it,
+         you can encapsulate and protect the variable.
+    Factory Methods: 
+         Static functions can be used to implement factory methods that create instances of the class. 
+         This is useful for controlling object creation and managing resources.
+    Helper Functions:
+         Static functions can serve as helper functions within a class, providing functionality that is related to the class but does not require access to instance-specific data.
+
+Que 4. What is friend function?
+    A friend function in C++ is a function that is not a member of a class but has access to the class's private and protected members. It is declared using the friend keyword inside the class whose private and protected members it needs to access.
+
+    Example:
+        #include <iostream>
+        
+        class MyClass {
+        private:
+            int privateVar;
+        public:
+            MyClass() : privateVar(0) {}
+            // Declare friend function
+            friend void showPrivateVar(MyClass& obj);
+        };
+
+        // Definition of friend function
+        void showPrivateVar(MyClass& obj) {
+            std::cout << "Private Variable: " << obj.privateVar << std::endl;
+        }
+
+        int main() {
+            MyClass obj;
+            showPrivateVar(obj); // Output: Private Variable: 0
+            return 0;
+        }
+
+    Characteristics of Friend Functions
+    Access: 
+        It can access private and protected members of the class.
+    Declaration: 
+        It is declared inside the class with the friend keyword.
+    Non-Member: 
+        It is not a member function of the class, so it is not called using an object of the class.
+    Scope: 
+        It can be a global function or a member function of another class.
+
+    Friend functions are useful when you need to allow a non-member function to access the private and protected members of a class,
+    such as for operator overloading or when implementing certain design patterns.
+
+Que 5. What is virtual polymorphism?
+    Virtual polymorphism in C++ refers to the ability of a base class to define functions that can be overridden by derived classes, 
+    allowing for dynamic method dispatch. This is achieved using virtual functions and is a key feature of object-oriented programming in C++.
+
+    Key Concepts
+        Virtual Function:
+             A function declared in the base class using the virtual keyword. It can be overridden in derived classes.
+        Dynamic Binding: 
+            The function to be called is determined at runtime based on the type of the object pointed to,
+             rather than the type of the pointer.
+        Polymorphism: 
+            The ability to call derived class methods through a base class pointer or reference.
+    
+            #include <iostream>
+
+            class Base {
+            public:
+                virtual void show() {
+                    std::cout << "Base class show function" << std::endl;
+                }
+
+                virtual ~Base() {} // Virtual destructor
+            };
+
+            class Derived : public Base {
+            public:
+                void show() override {
+                    std::cout << "Derived class show function" << std::endl;
+                }
+            };
+
+            int main() {
+                Base* basePtr;
+                Derived derivedObj;
+
+                basePtr = &derivedObj;
+
+                // Calls Derived class show function
+                basePtr->show(); // Output: Derived class show function
+
+                return 0;
+            }
+Que 6. What is pure virtual function ?
+    A pure virtual function in C++ is a virtual function that is declared in a base class but does not have an implementation in that class.
+    It is specified by assigning 0 to the function declaration. A class containing at least one pure virtual function is considered an abstract class and cannot be instantiated.
+
+    Key Points
+        Declaration:
+             A pure virtual function is declared by assigning 0 to the function declaration.
+        Abstract Class:
+             A class with at least one pure virtual function is an abstract class and cannot be instantiated.
+        Derived Classes: 
+            Derived classes must provide an implementation for the pure virtual function to be instantiated.
+
+        #include <iostream>
+
+        class Base {
+        public:
+            virtual void show() = 0; // Pure virtual function (do nothing function)
+
+            virtual ~Base() {} // Virtual destructor
+        };
+
+        class Derived : public Base {
+        public:
+            void show() override {
+                std::cout << "Derived class show function" << std::endl;
+            }
+        };
+
+        int main() {
+            // Base baseObj; // Error: Cannot instantiate abstract class
+            Derived derivedObj;
+            Base* basePtr = &derivedObj;
+
+            basePtr->show(); // Output: Derived class show function
+
+            return 0;
+        }
+    Explanation
+        Pure Virtual Function:
+             The show function in the Base class is declared as a pure virtual function using = 0.
+        Abstract Class: 
+            The Base class is an abstract class and cannot be instantiated.
+        Derived Class: 
+            The Derived class overrides the pure virtual function show and provides an implementation.
+        Usage: 
+            In the main function, a pointer to Base is used to call the show function, which invokes the overridden function in the Derived class.
+    Benefits
+        Interface Definition: 
+            Pure virtual functions allow the definition of an interface in the base class that must be implemented by derived classes.
+        Polymorphism: 
+            Enables runtime polymorphism by allowing derived classes to provide specific implementations for the pure virtual functions.
+
+Que 7. What is operator overloading?
+    Operator overloading in C++ is a feature that allows developers to redefine the way operators work for user-defined types (such as classes). 
+    This enables operators to be used with objects in a manner similar to how they are used with fundamental data types.
+
+    Key Points
+        Syntax:
+             Operator overloading is achieved by defining a special function with the keyword operator followed by the symbol of the operator being overloaded.
+             Member Function or Friend Function: Operators can be overloaded as member functions or friend functions.
+        Types of Operators:
+             Most operators can be overloaded, but there are a few that cannot be (e.g., ::, .*, ., ?:).
+
+            #include <iostream>
+
+            class Complex {
+            private:
+                float real;
+                float imag;
+
+            public:
+                Complex(float r = 0, float i = 0) : real(r), imag(i) {}
+
+                // Overloading the + operator
+                Complex operator+(const Complex& other) const {
+                    return Complex(real + other.real, imag + other.imag);
+                }
+
+                // Overloading the pre-increment operator
+                Complex& operator++() {
+                    ++real;
+                    ++imag;
+                    return *this;
+                 }
+            
+                // Overloading the post-increment operator
+                Complex operator++(int) {
+                    Complex temp = *this;
+                    real++;
+                    imag++;
+                    return temp;
+                }
+
+                void display() const {
+                    std::cout << real << " + " << imag << "i" << std::endl;
+                }
+            };
+
+            int main() {
+                Complex c1(3.0, 4.0);
+                Complex c2(1.0, 2.0);
+                Complex c3 = c1 + c2; // Using the overloaded + operator
+
+                c3.display(); // Output: 4 + 6i
+
+                return 0;
+            }
+
+    Pre-Increment Operator:
+     The operator++() function increments the real and imaginary parts and returns the incremented object.
+    Post-Increment Operator:
+     The operator++(int) function increments the real and imaginary parts but returns the original object before the increment.
+     The int parameter is a dummy parameter used to distinguish between pre- and post-increment operators.
+
+Que 8. What is the use of ifstream and ofstream ?
+In C++, ifstream and ofstream are classes provided by the Standard Library for file input and output operations, respectively.
+They are part of the <fstream> header.
+
+    ifstream (Input File Stream)
+        Purpose: Used to read data from files.
+        Usage: Create an ifstream object and associate it with a file to read data from that file.
+
+    ofstream (Output File Stream)
+        Purpose: Used to write data to files.
+        Usage: Create an ofstream object and associate it with a file to write data to that file.
+
+        #include <iostream>
+        #include <fstream>
+        #include <string>
+
+        int main() {
+            // Writing to a file using ofstream
+            std::ofstream outFile("example.txt");
+            if (outFile.is_open()) {
+                outFile << "Hello, World!" << std::endl;
+                outFile << "This is a test file." << std::endl;
+                outFile.close();
+            } else {
+                std::cerr << "Unable to open file for writing" << std::endl;
+            }
+
+            // Reading from a file using ifstream
+            std::ifstream inFile("example.txt");
+            if (inFile.is_open()) {
+                std::string line;
+                while (std::getline(inFile, line)) {
+                    std::cout << line << std::endl;
+                }
+                inFile.close();
+            } else {
+                std::cerr << "Unable to open file for reading" << std::endl;
+            }
+
+            return 0;
+        }
+
+Que 9. What is C++? Explain its features and benefits.
+   Answer: C++ is a general-purpose programming language created by Bjarne Stroustrup. It supports both procedural and object-oriented programming paradigms. Key features include:
+   - Encapsulation: Bundling data and methods that operate on the data.
+   - Inheritance: Creating new classes from existing ones.
+   - Polymorphism: Allowing entities to take multiple forms.
+   - Abstraction: Hiding complex implementation details and showing only the necessary features.
+
+Que 10. What is the difference between C and C++?
+   Answer: C++ is an extension of C with added features like classes, objects, and other OOP principles. C is procedural, while C++ supports both procedural and object-oriented programming.
+
+Que 11. What are the various data types in C++?
+   Answer: Data types in C++ include:
+   - Primitive types: int, char, float, double, etc.
+   - Derived types: arrays, pointers, references.
+   - User-defined types: classes, structures, enums, unions.
+
+OOP Concepts:
+Que 12. What is OOP? Explain its concepts.
+   Answer: OOP stands for Object-Oriented Programming. Key concepts include:
+   - Class: A blueprint for creating objects.
+   - Object: An instance of a class.
+   - Inheritance: Mechanism of deriving new classes from existing ones.
+   - Polymorphism: Ability of different classes to respond to the same function call.
+   - Encapsulation: Keeping data and methods that manipulate data together.
+   - Abstraction: Hiding the complex implementation details and showing only the necessary features.
+
+Que 13. What are classes and objects in C++?
+   Answer: A class is a user-defined data type that represents a blueprint for creating objects. Objects are instances of classes.
+
+Que 14. What is inheritance? Explain its types.
+   Answer: Inheritance is a feature that allows creating a new class from an existing class. Types include:
+   - Single inheritance: Deriving a class from one base class.
+   - Multiple inheritance: Deriving a class from multiple base classes.
+   - Multilevel inheritance: Deriving a class from a base class, which is derived from another base class.
+   - Hierarchical inheritance: Multiple classes derived from a single base class.
+   - Hybrid inheritance: Combination of two or more types of inheritance.
+
+Que 15. What is polymorphism? Explain with an example.
+   Answer: Polymorphism allows functions or methods to behave differently based on the object calling them. There are two types:
+   - Compile-time polymorphism: Function overloading and operator overloading.
+   - Run-time polymorphism: Achieved through virtual functions.
+
+Que 16. What are virtual functions?
+   Answer: Virtual functions are member functions declared within a base class and are overridden by a derived class. They ensure that the correct function is called for an object, regardless of the type of reference used for the function call.
+
+Advanced Topics:
+Que 17. What is the difference between deep copy and shallow copy?
+   Answer: A deep copy creates a new copy of dynamically allocated objects, while a shallow copy copies only the reference to those objects.
+
+Que 18. What are the various types of constructors in C++?
+   Answer: Types of constructors include:
+   - Default constructor: Takes no arguments.
+   - Parameterized constructor: Takes one or more arguments.
+   - Copy constructor: Takes a reference to an object of the same class as an argument.
+
+Que 19. What is the use of the ‘this’ pointer?
+   Answer: The ‘this’ pointer refers to the current object instance and is used to access members of the current object.
+
+Que 20. What are templates in C++?
+   Answer: Templates allow writing generic and reusable code. There are function templates and class templates.
+
+Que 21. What are exceptions and how are they handled in C++?
+   Answer: Exceptions are runtime errors handled using try, catch, and throw keywords to prevent the program from crashing.
+
+STL (Standard Template Library):
+Que 22. What is STL? Explain its components.
+   Answer: STL is a library of generic classes and functions. Components include:
+   - Containers: Store data (e.g., vector, list, map).
+   - Algorithms: Perform operations on containers (e.g., sort, search).
+   - Iterators: Traverse elements in containers.
+
+Que 23. What are the different types of containers in STL?
+   Answer: Types of containers include:
+   - Sequence containers: vector, list, deque.
+   - Associative containers: set, map, multiset, multimap.
+   - Container adapters: stack, queue, priority_queue.
+
+Que 24. What is the difference between vector and list containers?
+   Answer: Vectors use contiguous memory and allow random access, while lists use a doubly linked list structure and support efficient insertion and deletion.
+
+Memory Management:
+Que 25. How is memory management done in C++?
+   Answer: Memory management is done using dynamic allocation with new and delete operators.
+
+Que 26. What is a memory leak? How can it be prevented?
+   Answer: A memory leak occurs when memory allocated using new is not deallocated using delete. It can be prevented by ensuring proper use of delete and using smart pointers.
+
+Que 27. What are smart pointers? Explain their types.
+   Answer: Smart pointers manage memory automatically. Types include:
+   - unique_ptr: Ownership solely belongs to one pointer.
+   - shared_ptr: Ownership shared among multiple pointers.
+   - weak_ptr: Does not own the memory and points to a shared_ptr.
+
+Code Examples:
+Que 28. Write a program to reverse a string in C++.
+   
+   #include <iostream>
+   #include <algorithm>
+   using namespace std;
+
+   int main() {
+       string str = "Hello, World!";
+       reverse(str.begin(), str.end());
+       cout << "Reversed string: " << str << endl;
+       return 0;
+   }
+   
+
+Que 29. Write a program to demonstrate inheritance in C++.
+   
+   #include <iostream>
+   using namespace std;
+
+   class Base {
+   public:
+       void display() { cout << "Base class display" << endl; }
+   };
+
+   class Derived : public Base {
+   public:
+       void display() { cout << "Derived class display" << endl; }
+   };
+
+   int main() {
+       Derived obj;
+       obj.display();
+       obj.Base::display();
+       return 0;
+   }
+   
+
+Que 30. Write a program to sort an array using STL.
+   
+   #include <iostream>
+   #include <vector>
+   #include <algorithm>
+   using namespace std;
+
+   int main() {
+       vector<int> vec = {5, 3, 8, 6, 2};
+       sort(vec.begin(), vec.end());
+       cout << "Sorted array: ";
+       for (int v : vec) {
+           cout << v << " ";
+       }
+       cout << endl;
+       return 0;
+   }
+   
+
+Additional Coding Interview Questions:
+
+Que 31. Explain the difference between `new` and `malloc()`.
+   Answer: `new` is an operator in C++ that allocates memory and calls the constructor for the object, while `malloc()` is a C library function that allocates memory but does not call the constructor.
+
+Que 32. What is RAII (Resource Acquisition Is Initialization) in C++?
+   Answer: RAII is a programming idiom where resources are acquired and released by objects' constructors and destructors, ensuring resource management is tied to the lifespan of objects.
+
+Que 33. Explain the concept of namespace in C++.
+   Answer: Namespaces in C++ are used to organize code into logical groups and prevent name collisions. The `namespace` keyword is used to declare a scope for identifiers.
+
+Que 34. What is the difference between `struct` and `class` in C++?
+   Answer: The primary difference is that members of a `struct` are public by default, whereas members of a `class` are private by default. Both can have member functions and support inheritance.
+
+Que 35. Explain the difference between a `pointer` and a `reference` in C++.
+   Answer: A pointer can be reassigned and can be `NULL`, whereas a reference must be initialized when declared and cannot be reassigned. Pointers can perform pointer arithmetic; references cannot.
+
+Que 36. What is the Singleton design pattern, and how is it implemented in C++?
+   Answer: The Singleton pattern ensures a class has only one instance and provides a global point of access to it. It is implemented by making the constructor private and providing a static method to access the instance.
+
+Code Examples:
+
+Que 37. Write a program to check if a given number is prime.
+   
+   #include <iostream>
+   using namespace std;
+
+   bool isPrime(int num) {
+       if (num <= 1) return false;
+       for (int i = 2; i * i <= num; ++i) {
+           if (num % i == 0) return false;
+       }
+       return true;
+   }
+
+   int main() {
+       int num;
+       cout << "Enter a number: ";
+       cin >> num;
+       if (isPrime(num)) {
+           cout << num << " is a prime number." << endl;
+       } else {
+           cout << num << " is not a prime number." << endl;
+       }
+       return 0;
+   }
+   
+
+Que 38. Write a program to find the factorial of a number using recursion.
+   
+   #include <iostream>
+   using namespace std;
+
+   int factorial(int n) {
+       if (n <= 1) return 1;
+       return n * factorial(n - 1);
+   }
+
+   int main() {
+       int num;
+       cout << "Enter a number: ";
+       cin >> num;
+       cout << "Factorial of "<<factorial(num);
+       return 0;
+   }
