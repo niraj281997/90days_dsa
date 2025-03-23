@@ -1,6 +1,6 @@
 #include<iostream>
 using namespace std;
-
+#include<math.h>
 /* 
   number = 0b1100;         // 12 in decimal
   mask = 0b0010;           // 2 in decimal
@@ -35,5 +35,9 @@ int Function(int number,int position, int Set_Reset)
 }
 int main()
 {
+    int num = 1234;
+    //cout<<(num%9?num%9 : num ? 9:0);
+    num= (num ? (log10(num) +1 ):1);
+    cout<<num;
     return 0;
 }
